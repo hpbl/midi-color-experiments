@@ -1,3 +1,9 @@
+// Before runnign this, do the following:
+// Open audio_midi_setup.app on spotlight
+// doubli click IAC MIDI
+// mark it as connected and save
+// Open GarageBand or some other DAW.
+
 import themidibus.*; //Import the library
 
 MidiBus myBus; // The MidiBus
@@ -36,7 +42,7 @@ void draw() {
   background(bgColor);
   myBus.sendNoteOn(channel, notes[currNoteIndex], velocity); // Send a Midi noteOn
   delay(int(random(300, 900)));
-  myBus.sendNoteOff(channel, pitch, velocity); // Send a Midi nodeOff
+  myBus.sendNoteOff(channel, notes[currNoteIndex], velocity); // Send a Midi nodeOff
   setNextNoteIndex();
 }
 
