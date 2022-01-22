@@ -1,29 +1,74 @@
-PImage bg;
-ArrayList<PShape> shapes = new ArrayList<PShape>();
-ArrayList<PVector> vectors = new ArrayList<PVector>();
-color shapeColor = color(0, 0, 0);
-int shapeWidth = 64;
-int shapeHeight = 64;
+// Remember to add a background image at the same
+// folder of this script
 
+import themidibus.*;
+
+// 
+// Lifecycle
+// 
 void setup() {
   // The background image must be the same size as the screen
-  bg = loadImage("janjo.jpeg");
-  size(640, 640);
+  bg = loadImage("background.JPG");
+  size(600, 800);
 
   createAllShapes();
+
+  setupAudio();
 }
 
 void draw() {
   background(bg);
 
-  addOrRemoveRandomShape();
 
+  // calculating squares
+  int index = (int) random(shapes.size());
+  addOrRemoveRandomShape(index);
+
+  // audio
+  int channel = 0;
+  int velocity = randomVelocity();
+  Note note = new Note(channel, index, velocity);
+  myBus.sendNoteOn(note); // Send a Midi noteOn
+
+	// drawing squares
   for (PShape p : shapes) {
   	p.setFill(shapeColor);
   	p.setStroke(shapeColor);
   	shape(p);
   }
+
+  // stopping note
+	delay(int(random(100, 900)));
+  myBus.sendNoteOff(note); // Send a Midi nodeOff
 }
+
+
+// 
+// Audio stuff
+// 
+MidiBus myBus;
+int minVelocity = 50;
+int maxVelocity = 128;
+
+void setupAudio() {
+	MidiBus.list(); // List all available Midi devices on STDOUT. This will show each device's index and name.
+  myBus = new MidiBus(this, "IAC_MIDI", "IAC_MIDI");
+}
+
+int randomVelocity() {
+  return int(random(minVelocity, maxVelocity));
+}
+
+
+// 
+// Visual stuff
+// 
+PImage bg;
+ArrayList<PShape> shapes = new ArrayList<PShape>();
+ArrayList<PVector> vectors = new ArrayList<PVector>();
+color shapeColor = color(0, 0, 0);
+int shapeWidth = 60;
+int shapeHeight = 80;
 
 void createAllShapes() {
 	int columns = width / shapeWidth;
@@ -39,9 +84,7 @@ void createAllShapes() {
 	}
 }
 
-void addOrRemoveRandomShape() {
-	int index = (int) random(shapes.size());
-
-	PShape shape = shapes.get(index);
+void addOrRemoveRandomShape(int shapeIndex) {
+	PShape shape = shapes.get(shapeIndex);
 	shape.setVisible(!shape.isVisible());
 }
