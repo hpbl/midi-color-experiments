@@ -51,6 +51,7 @@ void noteOn(int channel, int pitch, int velocity) {
   //println("Pitch:"+pitch);
   //println("Velocity:"+velocity);
   int noteIndex = (int) map(pitch, minPitch, maxPitch, 0, shapes.size() - 1);
+  if (noteIndex >= shapes.size() || noteIndex < 0) return;
   PShape shape = shapes.get(noteIndex);
   
   shape.setVisible(velocity != 0);
