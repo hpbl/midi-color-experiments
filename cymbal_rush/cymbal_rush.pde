@@ -44,12 +44,28 @@ void draw() {
 // Function called whenever a new note is played
 void noteOn(int channel, int pitch, int velocity) {
   // Receive a noteOn
-  //println();
-  //println("Note On:");
-  //println("--------");
-  //println("Channel:"+channel);
-  //println("Pitch:"+pitch);
-  //println("Velocity:"+velocity);
+  println();
+  println("Note On:");
+  println("--------");
+  println("Channel:"+channel);
+  println("Pitch:"+pitch);
+  println("Velocity:"+velocity);
+  int noteIndex = (int) map(pitch, minPitch, maxPitch, 0, shapes.size() - 1);
+  if (noteIndex >= shapes.size() || noteIndex < 0) return;
+  PShape shape = shapes.get(noteIndex);
+  
+  shape.setVisible(velocity != 0);
+}
+
+void noteOff(int channel, int pitch, int velocity) {
+  // Receive a noteOff
+  println();
+  println("Note Off:");
+  println("--------");
+  println("Channel:"+channel);
+  println("Pitch:"+pitch);
+  println("Velocity:"+velocity);
+  
   int noteIndex = (int) map(pitch, minPitch, maxPitch, 0, shapes.size() - 1);
   if (noteIndex >= shapes.size() || noteIndex < 0) return;
   PShape shape = shapes.get(noteIndex);
